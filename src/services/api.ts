@@ -12,8 +12,14 @@ export const setToken = (token: string | null) => {
   }
 }
 
+// Normalize the base URL so it always ends with /api, whether the env var is
+// set with or without the prefix (e.g. https://hulagway.devokss.online or
+// https://hulagway.devokss.online/api). Prevents hitting a bare /auth/login 404.
+const rawBase = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api').replace(/\/+$/, '')
+const baseURL = rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api',
+  baseURL,
   headers: { Accept: 'application/json' },
 })
 
