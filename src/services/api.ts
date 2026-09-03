@@ -12,10 +12,11 @@ export const setToken = (token: string | null) => {
   }
 }
 
-// Normalize the base URL so it always ends with /api, whether the env var is
-// set with or without the prefix (e.g. https://hulagway.devokss.online or
-// https://hulagway.devokss.online/api). Prevents hitting a bare /auth/login 404.
-const rawBase = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000/api').replace(/\/+$/, '')
+// Backend API base URL — kept as a constant (not from env) so no Vercel
+// environment variable is required. Appended with /api if missing.
+export const API_BASE_URL = 'https://hulagway.devokss.online/api'
+
+const rawBase = API_BASE_URL.replace(/\/+$/, '')
 const baseURL = rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`
 
 const api = axios.create({
