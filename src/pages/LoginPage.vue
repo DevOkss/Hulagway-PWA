@@ -38,7 +38,7 @@ const submit = async () => {
     </div>
 
     <!-- Right panel: sign-in form — not a card -->
-    <div class="flex flex-1 items-center justify-center bg-white px-6 py-6 sm:px-10 sm:py-8 md:w-1/2">
+    <div class="flex flex-1 items-start justify-center bg-white px-6 py-5 sm:px-10 sm:py-6 md:items-center md:w-1/2">
       <div class="w-full max-w-md">
         <div class="mb-5 text-center sm:mb-6 md:text-left">
           <h2 class="font-heading text-2xl font-bold text-gray-900 sm:text-3xl">Welcome Back</h2>
