@@ -10,7 +10,37 @@
     <title>HULAGWAY</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- Boot splash: replaced by Vue on mount. If the JS bundle fails to
+        load or mount crashes (previously a silent blank orange screen on
+        phones), the user sees this message instead of nothing. -->
+      <div
+        id="boot-fallback"
+        style="min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: #fff7ed; color: #9a3412; font-family: system-ui, sans-serif; padding: 24px; text-align: center;"
+      >
+        <div style="font-weight: 800; letter-spacing: 0.1em; font-size: 20px;">HULAGWAY</div>
+        <div style="font-size: 13px;">Loading field surveys…</div>
+      </div>
+      <script>
+        // Last-resort diagnostic: if the module bundle never mounts (e.g.
+        // stale service-worker assets), say so instead of staying blank.
+        setTimeout(function () {
+          var app = document.getElementById('app');
+          // Vue replaces #app content on mount; inline <script> is ignored.
+          var booted = app && app.querySelector('*:not(script):not(#boot-fallback)');
+          if (app && !booted && document.getElementById('boot-fallback')) {
+            document.getElementById('boot-fallback').innerHTML =
+              '<div style="font-weight:800;letter-spacing:0.1em;font-size:20px;">HULAGWAY</div>' +
+              '<div style="font-size:13px;max-width:320px;">App failed to start. Pull-to-refresh once — if this persists, remove the installed app, clear browser site data for this site, then reinstall.</div>';
+          }
+        }, 8000);
+      </script>
+    </div>
+    <noscript>
+      <div style="padding: 24px; text-align: center; font-family: system-ui, sans-serif;">
+        HULAGWAY needs JavaScript enabled to collect field surveys.
+      </div>
+    </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

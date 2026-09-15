@@ -7,10 +7,16 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // GitHub Pages serves this project site under /Hulagway-PWA/ (no custom
+  // domain). The base is applied only for Pages builds so local dev keeps
+  // running at /. The deploy workflow sets GITHUB_PAGES=true.
+  base: process.env.GITHUB_PAGES ? '/Hulagway-PWA/' : '/',
   plugins: [
     vue(),
-    vueDevTools(),
+    // Dev-only: bundling vue-devtools into production broke rendering on
+    // some phone browsers (blank orange-tinted screen) and bloated the bundle.
+    ...(mode === 'development' ? [vueDevTools()] : []),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -24,7 +30,9 @@ export default defineConfig({
         background_color: '#FFF7ED',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        // Must match the served subpath: '/' would resolve to the domain
+        // root and the installed PWA would open a 404 outside the app scope.
+        start_url: process.env.GITHUB_PAGES ? '/Hulagway-PWA/' : '/',
         // Icons are generated from /public/logo.png (HULAGWAY logo) — see public/pwa-*.png
         icons: [
           {
@@ -52,8 +60,19 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        // Purge precaches from older deployments: a stale phone-side service
+        // worker serving an old index.html that references pruned hashed
+        // assets is the classic "blank orange screen on phone, fine on laptop".
+        cleanupOutdatedCaches: true,
+        // Take control ASAP so a fixed deployment replaces the broken SW
+        // without the user having to manually clear site data.
+        clientsClaim: true,
+        skipWaiting: true,
         navigateFallback: 'index.html',
-        navigateFallbackAllowlist: [/^\/surveys/, /^\/pending-sync/, /^\/offline-records/, /^\/submitted-records/, /^\/profile/, /^\/$/],
+        // Every app route must be listed — an omitted route (e.g. /login)
+        // falls back to network instead of the app shell, which on an
+        // installed PWA can render as a blank page.
+        navigateFallbackAllowlist: [/^\/$/, /^\/login/, /^\/surveys/, /^\/pending-sync/, /^\/offline-records/, /^\/submitted-records/, /^\/sync-history/, /^\/profile/],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
@@ -83,4 +102,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+}))

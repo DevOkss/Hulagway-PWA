@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
+import { asset } from '@/utils/asset'
+
+const logoUrl = asset('logo.png')
 
 const isVisible = ref(false)
 const isIOS = ref(false)
@@ -108,12 +111,14 @@ onUnmounted(() => {
         <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-5 pb-5 pt-5 text-white">
           <div class="flex items-center gap-3">
             <img
-              src="/logo.png"
+              :src="logoUrl"
               alt="HULAGWAY"
               class="size-12 rounded-xl bg-white p-1.5 shadow-md"
             />
             <div>
-              <h2 class="font-heading text-[17px] font-bold leading-none tracking-wide">HULAGWAY</h2>
+              <h2 class="font-heading text-[17px] font-bold leading-none tracking-wide">
+                HULAGWAY
+              </h2>
               <p class="text-[11px] font-medium opacity-90">Mapping Community Realities</p>
             </div>
             <button
@@ -121,7 +126,13 @@ onUnmounted(() => {
               aria-label="Close"
               @click="dismiss"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                class="size-4"
+              >
                 <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" />
               </svg>
             </button>
@@ -133,18 +144,36 @@ onUnmounted(() => {
 
         <!-- Body -->
         <div class="px-5 py-4">
-          <div v-if="isIOS && !deferredPrompt" class="rounded-xl border border-orange-100 bg-orange-50 px-3 py-3">
+          <div
+            v-if="isIOS && !deferredPrompt"
+            class="rounded-xl border border-orange-100 bg-orange-50 px-3 py-3"
+          >
             <p class="text-xs font-semibold text-orange-700">How to install on iPhone/iPad:</p>
             <ol class="mt-1.5 list-decimal space-y-1 pl-4 text-xs leading-snug text-neutral-600">
-              <li>Tap the <span class="font-semibold">Share</span> button <span class="inline-flex size-4 items-center justify-center rounded bg-neutral-900 text-[10px] text-white">↑</span> in Safari</li>
+              <li>
+                Tap the <span class="font-semibold">Share</span> button
+                <span
+                  class="inline-flex size-4 items-center justify-center rounded bg-neutral-900 text-[10px] text-white"
+                  >↑</span
+                >
+                in Safari
+              </li>
               <li>Choose <span class="font-semibold">Add to Home Screen</span></li>
               <li>Tap <span class="font-semibold">Add</span></li>
             </ol>
-            <img src="/logo.png" alt="App icon preview" class="mx-auto mt-3 size-16 rounded-xl border border-orange-200 bg-white p-2 shadow-sm" />
+            <img
+              :src="logoUrl"
+              alt="App icon preview"
+              class="mx-auto mt-3 size-16 rounded-xl border border-orange-200 bg-white p-2 shadow-sm"
+            />
           </div>
 
           <div v-else class="flex items-center gap-3">
-            <img src="/logo.png" alt="HULAGWAY icon" class="size-10 rounded-lg border border-orange-200 bg-white p-1 shadow-sm" />
+            <img
+              :src="logoUrl"
+              alt="HULAGWAY icon"
+              class="size-10 rounded-lg border border-orange-200 bg-white p-1 shadow-sm"
+            />
             <div class="text-xs text-neutral-600">
               <p class="font-semibold text-neutral-800">Add to Home Screen</p>
               <p class="text-[11px]">Works offline • Fast launch • No App Store needed</p>
@@ -173,7 +202,9 @@ onUnmounted(() => {
               Not now
             </button>
           </div>
-          <p class="mt-2 text-center text-[10px] text-neutral-400">Shows only once • Won't appear when already installed</p>
+          <p class="mt-2 text-center text-[10px] text-neutral-400">
+            Shows only once • Won't appear when already installed
+          </p>
         </div>
       </div>
     </div>
@@ -183,7 +214,9 @@ onUnmounted(() => {
 <style scoped>
 .pwa-popup-enter-active,
 .pwa-popup-leave-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 .pwa-popup-enter-from,
 .pwa-popup-leave-to {

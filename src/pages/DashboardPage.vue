@@ -4,6 +4,9 @@ import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useSurveyStore } from '@/stores/survey'
 import { useSyncStore } from '@/stores/sync'
+import { asset } from '@/utils/asset'
+
+const bgUrl = asset('bg.png')
 
 const auth = useAuthStore()
 const surveyStore = useSurveyStore()
@@ -120,7 +123,7 @@ const quickActions = [
     </div>
 
     <div class="mt-6 rounded-2xl border border-dashed border-brand-300 bg-brand-50 p-6 text-center">
-      <img src="/bg.png" alt="" class="mx-auto w-24 opacity-90 sm:w-32" />
+      <img :src="bgUrl" alt="" class="mx-auto w-24 opacity-90 sm:w-32" />
       <p class="mt-3 text-sm font-medium text-brand-700">Mapping Community Realities</p>
       <p class="text-xs text-brand-500">Toward Informed Extension Planning</p>
     </div>
