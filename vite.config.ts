@@ -8,10 +8,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
-  // GitHub Pages serves this project site under /Hulagway-PWA/ (no custom
-  // domain). The base is applied only for Pages builds so local dev keeps
-  // running at /. The deploy workflow sets GITHUB_PAGES=true.
-  base: process.env.GITHUB_PAGES ? '/Hulagway-PWA/' : '/',
+  // Vercel serves the app from the domain root, so base stays '/'.
+  base: '/',
   plugins: [
     vue(),
     // Dev-only: bundling vue-devtools into production broke rendering on
@@ -30,9 +28,9 @@ export default defineConfig(({ mode }) => ({
         background_color: '#FFF7ED',
         display: 'standalone',
         orientation: 'portrait',
-        // Must match the served subpath: '/' would resolve to the domain
-        // root and the installed PWA would open a 404 outside the app scope.
-        start_url: process.env.GITHUB_PAGES ? '/Hulagway-PWA/' : '/',
+        // Domain root (Vercel). Must match the served path or the installed
+        // PWA opens outside the app scope.
+        start_url: '/',
         // Icons are generated from /public/logo.png (HULAGWAY logo) — see public/pwa-*.png
         icons: [
           {

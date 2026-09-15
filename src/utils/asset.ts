@@ -1,9 +1,8 @@
-// Base-aware URL helpers for GitHub Pages project-site hosting.
+// Base-aware URL helpers for public assets and app routes.
 //
-// The app is served under a subpath in production (e.g. /Hulagway-PWA/),
-// so absolute `/...` URLs break there. Always build public-asset and
-// location URLs through these helpers — in local dev BASE_URL is `/`,
-// so behavior is unchanged.
+// Absolute `/...` URLs break if the app is ever served under a subpath,
+// so public-asset and location URLs go through these helpers — with the
+// root base used in dev and on Vercel, output is identical to `/...`.
 
 export const BASE_URL: string = import.meta.env.BASE_URL || '/'
 

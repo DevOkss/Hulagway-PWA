@@ -35,14 +35,11 @@ Deliberately **narrow in scope**: no admin features. Management/monitoring lives
 ## Branding
 Orange gradient palette anchored on `#F97316`; fonts DM Sans (body) + Poppins (headings). Logo/icon assets to be supplied by client (placeholders for now).
 
-## Deployment (GitHub Pages)
-Live at **https://devokss.github.io/Hulagway-PWA/** via `.github/workflows/deploy-pages.yml`
-(push to `main` → build with `GITHUB_PAGES=true` → official `actions/deploy-pages`, OIDC, no secrets).
-- `vite.config.ts` sets `base: '/Hulagway-PWA/'` only for Pages builds; local dev stays at `/`.
+## Deployment (Vercel)
+Live PWA hosted on **Vercel** (auto-deploys on push to `main`; SPA rewrites via `vercel.json`).
 - API base: `VITE_API_URL` env or production fallback (`src/services/api.ts`); laptop dev override lives in gitignored `.env.development.local` (dev-mode only, never baked into builds).
-- SPA refresh/deep links: postbuild copies `dist/index.html` → `dist/404.html` (`scripts/copy-404.mjs`); `public/.nojekyll` disables Jekyll.
-- Never hardcode `localhost` URLs or absolute `/...` asset paths — use `src/utils/asset.ts` helpers.
-- Backend must list `https://devokss.github.io` in `config/cors.php` allowed origins.
+- Never hardcode `localhost` URLs — use `src/utils/asset.ts` helpers for public assets/routes.
+- Backend must allow the Vercel origin in `config/cors.php` (see `hulagway-backend`).
 
 ## Related Projects
 - `../hulagway-backend` — Laravel API server this PWA talks to
