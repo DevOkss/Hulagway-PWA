@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useSurveyStore } from '@/stores/survey'
 import { useSyncStore } from '@/stores/sync'
 import { asset } from '@/utils/asset'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 
 const bgUrl = asset('bg.png')
 
@@ -54,6 +55,12 @@ const quickActions = [
 </script>
 
 <template>
+  <!-- Full-screen only on first load with nothing cached; cached data
+    renders instantly while refresh happens in the background. -->
+  <FullScreenLoader
+    v-if="surveyStore.loading && !surveyStore.surveys.length"
+    message="Preparing your overview…"
+  />
   <section>
     <h1 class="font-heading text-xl font-semibold text-neutral-900 sm:text-2xl">
       Hi, {{ firstName }}

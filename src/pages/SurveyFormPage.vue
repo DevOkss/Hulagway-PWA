@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BarangaySearchSelect from '@/components/BarangaySearchSelect.vue'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { CachedSurvey } from '@/types/offline'
@@ -10,6 +11,7 @@ const router = useRouter()
 const surveyStore = useSurveyStore()
 
 const survey = ref<CachedSurvey | null>(null)
+const loadingSurvey = ref(true)
 const showSubmitConfirm = ref(false)
 const saving = ref(false)
 
@@ -126,8 +128,9 @@ const removeMember = (idx: number) => {
 }
 
 onMounted(async () => {
-  const id = Number(route.params.id)
-  survey.value = (await surveyStore.getSurvey(id)) ?? null
+  try {
+    const id = Number(route.params.id)
+    survey.value = (await surveyStore.getSurvey(id)) ?? null
   // Fallback: if cached survey has no type (old cache before fix), fetch fresh from API
   if (survey.value && !(survey.value as any).type) {
     try {
@@ -172,6 +175,9 @@ onMounted(async () => {
       showUnsyncedDialog.value = true
     }
   } catch {}
+  } finally {
+    loadingSurvey.value = false
+  }
 })
 
 const isIndividual = (q: any) => (q as any).data_scope === 'individual'
@@ -368,7 +374,8 @@ const submitResponse = async () => {
 </script>
 
 <template>
-  <section v-if="survey">
+  <FullScreenLoader v-if="loadingSurvey" message="Loading survey…" />
+  <section v-else-if="survey">
     <button type="button" class="mb-3 cursor-pointer text-sm font-medium text-brand-600 hover:text-brand-700" @click="router.back()">← Back</button>
     <h1 class="font-heading text-xl font-semibold text-neutral-900 sm:text-2xl">{{ survey.title }}</h1>
 

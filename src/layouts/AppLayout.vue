@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { useSyncStore } from '@/stores/sync'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 import { asset } from '@/utils/asset'
 
 const logoUrl = asset('logo.png')
@@ -61,7 +62,16 @@ const navItems = [
 
     <!-- Content -->
     <main class="mx-auto w-full max-w-3xl flex-1 px-4 pt-4 pb-24 sm:px-6">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <template v-if="Component">
+          <Suspense>
+            <component :is="Component" />
+            <template #fallback>
+              <FullScreenLoader message="Opening…" />
+            </template>
+          </Suspense>
+        </template>
+      </RouterView>
     </main>
 
     <!-- Bottom navigation -->

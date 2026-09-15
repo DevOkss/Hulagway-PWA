@@ -2,6 +2,7 @@
 import { onMounted, ref, computed } from 'vue'
 import api from '@/services/api'
 import { useSyncStore } from '@/stores/sync'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 
 const sync = useSyncStore()
 
@@ -322,7 +323,7 @@ const printResponse = (r: SurveyGroup['responses'][number]) => {
       <span class="shrink-0 rounded-xl bg-neutral-100 px-3 py-2.5 text-xs font-medium text-neutral-500">{{ filtered.length }} / {{ grouped.length }}</span>
     </div>
 
-    <p v-if="loading && !grouped.length" class="mt-8 text-center text-sm text-neutral-400">Loading submitted records...</p>
+    <FullScreenLoader v-if="loading && !grouped.length" message="Loading submitted records…" />
 
     <div v-else-if="!filtered.length" class="mt-8 rounded-2xl border border-dashed border-neutral-300 bg-white p-10 text-center text-sm text-neutral-400">
       No submitted records found.

@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 
 const router = useRouter()
 const surveyStore = useSurveyStore()
@@ -27,12 +28,10 @@ const formatDate = (iso: string | null | undefined) => {
     </h1>
     <p class="mt-0.5 text-sm text-neutral-500">Surveys assigned for field collection.</p>
 
-    <p
+    <FullScreenLoader
       v-if="surveyStore.loading && !surveyStore.surveys.length"
-      class="mt-8 text-center text-sm text-neutral-400"
-    >
-      Loading surveys…
-    </p>
+      message="Loading surveys…"
+    />
 
     <div v-else class="mt-4 space-y-3">
       <button

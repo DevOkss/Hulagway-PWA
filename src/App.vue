@@ -3,6 +3,7 @@ import { RouterView, useRoute } from 'vue-router'
 import { onMounted, onUnmounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useSyncStore } from '@/stores/sync'
+import FullScreenLoader from '@/components/FullScreenLoader.vue'
 import InstallPwaPopup from '@/components/InstallPwaPopup.vue'
 
 const route = useRoute()
@@ -38,6 +39,17 @@ watch(
 </script>
 
 <template>
-  <RouterView :key="route.fullPath" />
+  <!-- Suspense covers lazy route-chunk loading so entering a page never
+    shows an empty shell on slow phones. -->
+  <RouterView v-slot="{ Component }">
+    <template v-if="Component">
+      <Suspense>
+        <component :is="Component" :key="route.fullPath" />
+        <template #fallback>
+          <FullScreenLoader message="Opening…" />
+        </template>
+      </Suspense>
+    </template>
+  </RouterView>
   <InstallPwaPopup />
 </template>
