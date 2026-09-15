@@ -12,16 +12,13 @@ export const setToken = (token: string | null) => {
   }
 }
 
-// Backend API base URL — env-driven with a production fallback so Vercel
-// builds (no env var configured) always target the live backend.
-// Local dev: copy `.env.example` to `.env.development.local` and set
+// API base URL — relative by default so Vercel proxies /api/* to the backend
+// (same-origin, no CORS). Local dev overrides via .env.development.local:
 //   VITE_API_URL=http://localhost:8001/api
-// Never commit a localhost URL here — that breaks the deployed PWA on phones
-// (a phone's "localhost" is the phone itself, plus HTTPS pages block http APIs
-// as mixed content, so login/sync/submit all fail with Network Error).
-const PROD_API_URL = 'https://hulagway.devokss.online/api'
+// Never hardcode an absolute URL here — HTTPS pages block http:// mixed
+// content, and a phone's "localhost" is the phone itself.
 const envUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim()
-export const API_BASE_URL = envUrl ? envUrl : PROD_API_URL
+export const API_BASE_URL = envUrl || '/api'
 
 const rawBase = API_BASE_URL.replace(/\/+$/, '')
 const baseURL = rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`
